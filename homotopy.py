@@ -162,13 +162,12 @@ def swapIn(amount, c, x_centre, y_centre, x_coord, y_coord, x_price, y_price, x_
 
 
 def new_centre(old_centre, c, p, q): 
-
     new_centre = old_centre * np.sqrt((1-c)/(q*(1/p) - c))
     c_new = 2 - p/q*(c+2*(1-c)*(old_centre**2/new_centre**2))
     return new_centre, c_new
 
 
-def repeg(amount, c, x_centre, y_centre, x_coord, y_coord, x_price, y_price, x_excess, y_excess, fee):
+def swap(amount, c, x_centre, y_centre, x_coord, y_coord, x_price, y_price, x_excess, y_excess, fee):
     if amount<0:
         marginal_price, x_coord, y_coord, x_excess, y_excess, fee = swapOut(amount, c, x_centre, y_centre, x_coord, y_coord, x_price, y_price, x_excess, y_excess, fee)
     else:

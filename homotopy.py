@@ -194,3 +194,6 @@ def arbitrage_binary_search(x_coord, y_coord, price_x, price_y, target_price, c,
 
     return -1
     
+def twap(prices, times, n):
+    twap = np.average(prices[-n:], weights=times[:n])
+    return twap

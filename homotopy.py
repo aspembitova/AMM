@@ -1,11 +1,6 @@
-import warnings
-warnings.filterwarnings('ignore')
 import numpy as np
-import seaborn as sns
 import pandas as pd
 import math
-import scipy as sp
-import scipy.stats
 import matplotlib.pyplot as plt
 import random
 

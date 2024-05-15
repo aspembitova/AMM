@@ -40,7 +40,6 @@ keys = ["x_price", "y_price", "peg_price", "x_centre", "y_centre", "x_coord", "y
 amounts = test_set1['amount0']
 market_prices = test_set1['price']
 x_price, y_price, peg_price, x_centre, y_centre, x_coord, y_coord, fee_p, c, y_excess, x_excess, threshold, tolerance, low, high, marginal_price = [float(config_object.get("Params",x)) for x in keys]
-fees = 0
 sample = np.arange(1, x_centre)
 
 m_prices = [] 

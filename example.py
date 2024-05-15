@@ -59,38 +59,38 @@ for amount, market_price in zip(amounts, market_prices):
         
             if marginal_price < y_price: # marginal price is lower than peg and oracle, change to oracle:
                 #x_centre, c_y = new_centre(x_centre, c, peg_price, y_price)
-                marginal_price, x_coord, y_coord, x_excess, y_excess, fee = repeg(amount, c, x_centre, y_centre, x_coord, y_coord, x_price, y_price, x_excess, y_excess, fee_p)
+                marginal_price, x_coord, y_coord, x_excess, y_excess, fee = swap(amount, c, x_centre, y_centre, x_coord, y_coord, x_price, y_price, x_excess, y_excess, fee_p)
                 peg_price = y_price
             
             elif marginal_price > peg_price: # marginal price is higher than peg and oracle, stay at peg:
-                marginal_price, x_coord, y_coord, x_excess, y_excess, fee = repeg(amount, c, x_centre, y_centre, x_coord, y_coord, x_price, peg_price, x_excess, y_excess, fee_p)
+                marginal_price, x_coord, y_coord, x_excess, y_excess, fee = swap(amount, c, x_centre, y_centre, x_coord, y_coord, x_price, peg_price, x_excess, y_excess, fee_p)
                 peg_price = peg_price
                     
             else: # marginal price in between peg and oracle, change to marginal
                 #x_centre, c_x0 = new_centre(x_centre, c, peg_price, marginal_price)
-                marginal_price, x_coord, y_coord, x_excess, y_excess, fee = repeg(amount, c, x_centre, y_centre, x_coord, y_coord, x_price, marginal_price, x_excess, y_excess, fee_p)
+                marginal_price, x_coord, y_coord, x_excess, y_excess, fee = swap(amount, c, x_centre, y_centre, x_coord, y_coord, x_price, marginal_price, x_excess, y_excess, fee_p)
                 peg_price = marginal_price
             
 
         else: #price went up (y_price>peg_price)
             if marginal_price > y_price: #marg price higher than new oracle price and peg price, change to new oracle price
                 x_centre, c_x = new_centre(x_centre, c, peg_price, y_price) #change the x centre and c
-                marginal_price, x_coord, y_coord, x_excess, y_excess, fee = repeg(amount, c_x, x_centre, y_centre, x_coord, y_coord, x_price, y_price, x_excess, y_excess, fee_p)
+                marginal_price, x_coord, y_coord, x_excess, y_excess, fee = swap(amount, c_x, x_centre, y_centre, x_coord, y_coord, x_price, y_price, x_excess, y_excess, fee_p)
                 peg_price = y_price # we change peg price to the oracle price
                 c = c_x
                 
             elif marginal_price < peg_price: 
-                marginal_price, x_coord, y_coord, x_excess, y_excess, fee = repeg(amount, c, x_centre, y_centre, x_coord, y_coord, x_price, peg_price, x_excess, y_excess, fee_p)
+                marginal_price, x_coord, y_coord, x_excess, y_excess, fee = swap(amount, c, x_centre, y_centre, x_coord, y_coord, x_price, peg_price, x_excess, y_excess, fee_p)
                 peg_price = peg_price 
 
             else:
                 x_centre, c_x0 = new_centre(x_centre, c, peg_price, marginal_price)
-                marginal_price, x_coord, y_coord, x_excess, y_excess, fee = repeg(amount, c, x_centre, y_centre, x_coord, y_coord, x_price, marginal_price, x_excess, y_excess, fee_p)
+                marginal_price, x_coord, y_coord, x_excess, y_excess, fee = swap(amount, c, x_centre, y_centre, x_coord, y_coord, x_price, marginal_price, x_excess, y_excess, fee_p)
                 peg_price = marginal_price
         fees = 0
             
     else: #re-peg condition not met, use old price
-        marginal_price, x_coord, y_coord, x_excess, y_excess, fee1 = repeg(amount, c, x_centre, y_centre, x_coord, y_coord, x_price, peg_price, x_excess, y_excess, fee_p)
+        marginal_price, x_coord, y_coord, x_excess, y_excess, fee1 = swap(amount, c, x_centre, y_centre, x_coord, y_coord, x_price, peg_price, x_excess, y_excess, fee_p)
         fees += fee1 
  
     #Arbitrage transactions to match the market price:  
@@ -99,11 +99,11 @@ for amount, market_price in zip(amounts, market_prices):
         dx = 0 #no arbitrage needed
         
     elif market_price>marginal_price: 
-        dx = arbitrage_binary_search1(x_coord, y_coord, x_price, y_price, market_price, c, low, high, tolerance)
+        dx = arbitrage_binary_search(x_coord, y_coord, x_price, y_price, market_price, c, low, high, tolerance)
             
     else: 
         target_price_x = 1/market_price
-        dx = -arbitrage_binary_search1(y_coord, x_coord, y_price, x_price, target_price_x, c, low, high, tolerance)
+        dx = -arbitrage_binary_search(y_coord, x_coord, y_price, x_price, target_price_x, c, low, high, tolerance)
     
     arb_amount = dx - abs(amount)
     

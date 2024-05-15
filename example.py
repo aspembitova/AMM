@@ -48,7 +48,7 @@ pys = []
 y_prices = []
 dxs = []
 arb_amounts = []
-mps = []
+mps = [] 
 
 for amount, market_price in zip(amounts, market_prices): 
     
@@ -116,7 +116,7 @@ for amount, market_price in zip(amounts, market_prices):
     arb_amounts.append(arb_amount)
     m_prices.append(marginal_price)
     pys.append(peg_price)
-    cs.append(c)
+    cs.append(c) 
     times = [1] * len(m_prices)
     mps.append(market_price)
     y_price = twap(m_prices, times, 10)
